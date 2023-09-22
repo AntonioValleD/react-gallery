@@ -11,6 +11,7 @@ import Navigation from '../components/Navigation'
 import NewImageForm from '../components/NewImageForm'
 import ImageDetail from '../components/ImageDetail'
 import FilterMenu from '../components/FilterMenu'
+import UserInfo from '../components/UserInfo'
 
 
 const ImageGallery = () => {
@@ -102,6 +103,8 @@ const ImageGallery = () => {
     />
   } else if (modalStatus.filterMenu){
     modalWindow = <FilterMenu/>
+  } else if (modalStatus.userInfo){
+    modalWindow = <UserInfo/>
   }
 
 

@@ -40,6 +40,18 @@ const Login = () => {
   }
 
 
+  // Name to short name
+  const nameToShort = (userName) => {
+    let shortName = userName[0]
+    for (let i = 0; i < userName.length; i++){
+      if (userName[i] === " "){
+        shortName += userName[i + 1]
+        return shortName
+      }
+    }
+  }
+
+
   // User login
   const submitLogin = async (event) => {
     event.preventDefault()
@@ -54,6 +66,15 @@ const Login = () => {
       dispatch(setAppConfig({
         configName: "token",
         configPayload: data.token,
+      }))
+
+      let userData = {...data.userInfo}
+      userData["shortName"] = nameToShort(data.userInfo.name)
+      userData["profileImageUrl"] = ""
+
+      dispatch(setAppConfig({
+        configName: "userInfo",
+        configPayload: userData,
       }))
 
       await fetchImages(data.token)

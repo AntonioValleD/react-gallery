@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { setActiveFilters, bootstrapFilterList } from '../features/filterSlice/filterListSlice'
 import { setFilteredImageList } from '../features/imageSlice/imageSlice'
+import { GiCheckMark } from "react-icons/gi"
 
 
 const FilterMenu = () => {
@@ -137,10 +138,11 @@ const FilterMenu = () => {
         onAnimationEnd={() => closeFilterMenu()}
       >
         <h3
-          className='flex justify-center items-center absolute right-3 top-3 w-8 h-8 rounded-full text-center text-base font-medium text-white bg-red-700 hover:bg-red-500 cursor-pointer'
+          className='flex justify-center items-center absolute right-3 top-3 w-8 h-8 rounded-full text-center text-sm text-white bg-lime-700 hover:bg-lime-600 cursor-pointer font-bold'
           onClick={() => setCloseButton(true)}
+          title='Guardar filtros'
         >
-          X
+          <GiCheckMark/>
         </h3>
 
         <h1

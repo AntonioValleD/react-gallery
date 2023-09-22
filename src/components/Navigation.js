@@ -1,11 +1,15 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 
 
 const Navigation = () => {
   // Hooks
   const dispatch = useDispatch()
+
+
+  // Redux state
+  const userInfo = useSelector(state => state.appConfig).userInfo
 
 
   // Button functions
@@ -19,6 +23,13 @@ const Navigation = () => {
   const openFilterMenu = () => {
     dispatch(changeModalStatus({
       modalName: "filterMenu",
+      modalStatus: true
+    }))
+  }
+
+  const openUserInfo = () => {
+    dispatch(changeModalStatus({
+      modalName: "userInfo",
       modalStatus: true
     }))
   }
@@ -45,6 +56,18 @@ const Navigation = () => {
       >
         Subir imagen
       </button>
+
+      <div
+        title='Usuario'
+        className='rounded-full bg-lime-600 h-10 w-10 flex justify-center items-center cursor-pointer'
+        onClick={() => openUserInfo()}
+      >
+        <label
+          className='cursor-pointer'
+        >
+          {userInfo.shortName}
+        </label>
+      </div>
     </div>
   )
 }

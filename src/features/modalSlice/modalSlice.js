@@ -5,6 +5,7 @@ const initialState = {
   addImage: false,
   imageDetail: false,
   filterMenu: false,
+  userInfo: false,
 }
 
 
