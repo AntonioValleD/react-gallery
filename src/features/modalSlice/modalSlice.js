@@ -7,6 +7,7 @@ const initialState = {
   filterMenu: false,
   userInfo: false,
   updateProfileImage: false,
+  tagList: false,
 }
 
 

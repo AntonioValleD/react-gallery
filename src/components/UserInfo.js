@@ -21,6 +21,7 @@ import { AiFillTags } from "react-icons/ai"
 // Component import
 import toast, { Toaster } from 'react-hot-toast'
 import UpdateProfileImage from './UpdateProfileImage'
+import TagList from './TagList'
 
 
 const UserInfo = () => {
@@ -46,6 +47,14 @@ const UserInfo = () => {
       }))
     }
   }
+
+  const openEditTagList = () => {
+    dispatch(changeModalStatus({
+      modalName: "tagList",
+      modalStatus: true
+    }))   
+  }
+
 
   // Logout
   const userLogout = () => {
@@ -81,6 +90,8 @@ const UserInfo = () => {
   let modalWindow
   if (modalStatus.updateProfileImage){
     modalWindow = <UpdateProfileImage/>
+  } else if (modalStatus.tagList){
+    modalWindow = <TagList/>
   }
 
 
@@ -101,7 +112,7 @@ const UserInfo = () => {
         }}
       />
       <div 
-        className={`h-fit relative p-4 bg-gray-950 shadow-xl shadow-gray-700 text-white animate__animated ${closeButton ? 'animate__fadeOutRight' : 'animate__fadeInRight'} flex flex-col items-center`}
+        className={`h-fit relative p-4 bg-gray-950 shadow-xl shadow-gray-700 text-white animate__animated ${closeButton ? 'animate__fadeOutRight' : 'animate__fadeInRight'} animate__faster flex flex-col items-center`}
         style={{ width: "300px" }}
         onAnimationEnd={() => closeUserInfo()}
       >
@@ -176,6 +187,7 @@ const UserInfo = () => {
           <label
             className='rounded-full border p-1 cursor-pointer text-lg hover:text-yellow-300 hover:border-yellow-300'
             title='Editar etiquetas'
+            onClick={() => openEditTagList()}
           >
             <AiFillTags/>
           </label>

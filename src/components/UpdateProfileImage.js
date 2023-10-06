@@ -104,6 +104,7 @@ const UpdateProfileImage = (props) => {
         <h3
           className='flex justify-center items-center absolute right-3 top-3 w-8 h-8 rounded-full text-center text-xl text-white bg-red-700 hover:bg-red-500 cursor-pointer'
           onClick={() => setCloseButton(true)}
+          title='Cancelar'
         >
           <MdOutlineClose/>
         </h3>
@@ -150,7 +151,7 @@ const UpdateProfileImage = (props) => {
         />
 
         <button
-          className='absolute bottom-2 bg-green-800 hover:bg-green-600 py-1 w-80 text-white text-base rounded'
+          className='absolute bottom-2 bg-green-800 hover:bg-green-600 py-1 px-2 mb-2 text-white text-base rounded'
           onClick={() => submitImage()}
         >
           Guardar cambios
