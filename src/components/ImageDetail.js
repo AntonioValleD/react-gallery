@@ -12,6 +12,7 @@ import { BiSolidSave } from 'react-icons/bi'
 import { HiPlus } from 'react-icons/hi'
 import { AiOutlineClose } from 'react-icons/ai'
 import { RiDeleteBinFill } from 'react-icons/ri'
+import { MdOutlineClose } from "react-icons/md"
 import DataTable from 'react-data-table-component'
 import ImageCarrousel from './ImageCarrousel'
 
@@ -408,10 +409,10 @@ const ImageDetail = (props) => {
         onAnimationEnd={() => closeFullImg()}
       >
         <h3
-          className='flex justify-center items-center absolute right-2 top-2 w-8 h-8 rounded-full text-center text-base font-medium text-white bg-red-700 hover:bg-red-600 cursor-pointer'
+          className='flex justify-center items-center absolute right-2 top-2 w-8 h-8 rounded-full text-center text-xl font-medium text-white bg-red-700 hover:bg-red-600 cursor-pointer'
           onClick={() => setCloseButton(true)}
         >
-          X
+          <MdOutlineClose/>
         </h3>
 
         <div
@@ -544,7 +545,7 @@ const ImageDetail = (props) => {
               </div>
 
               <label className='px-2 text-lg select-none'>
-                Metadatos
+                Etiquetas
               </label>
             </div>
 
@@ -553,7 +554,7 @@ const ImageDetail = (props) => {
             >
               <div className='flex flex-col'>
                 <label className='px-1 select-none'>
-                  Metadato:
+                  Etiqueta:
                 </label>
                 <input className={`px-1 text-center rounded ${metadataConfig.disableInputs ? 'text-white' : 'text-black'}`}
                   disabled={metadataConfig.disableInputs}

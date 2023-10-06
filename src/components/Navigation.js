@@ -13,13 +13,6 @@ const Navigation = () => {
 
 
   // Button functions
-  const openNewImageForm = () => {
-    dispatch(changeModalStatus({
-      modalName: "addImage",
-      modalStatus: true
-    }))
-  }
-
   const openFilterMenu = () => {
     dispatch(changeModalStatus({
       modalName: "filterMenu",
@@ -49,13 +42,6 @@ const Navigation = () => {
       </div>
 
       <h1 className='text-3xl select-none'>Galería</h1>
-
-      <button
-        className='bg-lime-700 hover:bg-lime-600 text-white w-fit py-1 px-2 rounded-md'
-        onClick={() => openNewImageForm()}
-      >
-        Subir imagen
-      </button>
 
       <div
         title='Usuario'

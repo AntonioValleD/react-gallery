@@ -6,20 +6,21 @@ const initialState = {
   imageDetail: false,
   filterMenu: false,
   userInfo: false,
+  updateProfileImage: false,
 }
 
 
 export const modalSlice = createSlice({
-    name: "modalSlice",
-    initialState: initialState,
-    reducers: {
-        changeModalStatus: (state, action) => {
-            const modalName = action.payload.modalName
-            const modalStatus = action.payload.modalStatus
+  name: "modalSlice",
+  initialState: initialState,
+  reducers: {
+    changeModalStatus: (state, action) => {
+      const modalName = action.payload.modalName
+      const modalStatus = action.payload.modalStatus
 
-            state[modalName] = modalStatus
-        }
-    }
+      state[modalName] = modalStatus
+    },
+  },
 })
 
 

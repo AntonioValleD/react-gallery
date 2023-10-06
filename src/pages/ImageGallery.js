@@ -26,6 +26,7 @@ const ImageGallery = () => {
   const filteredImageList = useSelector(state => state.imageList).filteredImageList
 
   const [selectedImageList, setSelectedImageList] = useState([])
+  const [newImageHover, setNewImageHover] = useState(false)
 
 
   // Check filtered list
@@ -68,6 +69,15 @@ const ImageGallery = () => {
     dispatch(changeModalStatus({
       modalName: "imageDetail",
       modalStatus: true,
+    }))
+  }
+
+
+  // Add new image
+  const openNewImageForm = () => {
+    dispatch(changeModalStatus({
+      modalName: "addImage",
+      modalStatus: true
     }))
   }
 
@@ -135,6 +145,16 @@ const ImageGallery = () => {
           },
         }}
       />
+
+      <label
+        className='bg-lime-700 hover:bg-white text-white hover:text-lime-700 border-2 hover:font-medium border-lime-700 text-4xl rounded-full fixed bottom-8 right-10 z-10 w-14 h-14 flex justify-center items-center pb-2 cursor-pointer animate__animated newImgAnimation'
+        onClick={() => openNewImageForm()}
+        onMouseEnter={() => setNewImageHover(true)}
+        onMouseLeave={() => setNewImageHover(false)}
+        title='Nueva imagen'
+      >
+        +
+      </label>
 
       <div className='w-full'>
         <Navigation/>

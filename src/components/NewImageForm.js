@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { MdOutlineClose } from "react-icons/md"
 import DataTable from 'react-data-table-component'
 import addFilterImg from "../assets/img/New green.png"
 import deleteFilterImg from "../assets/img/Eliminar red.png"
@@ -260,7 +261,7 @@ const NewImageForm = (props) => {
 
   return (
     <div 
-      className={`fixed w-screen h-screen top-0 right-0 z-10 flex items-center justify-center ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
+      className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-center justify-center ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
     >
       <Toaster
         toastOptions={{
@@ -280,10 +281,10 @@ const NewImageForm = (props) => {
         onAnimationEnd={() => closeNewImageForm()}
       >
         <h3
-          className='flex justify-center items-center absolute right-3 top-3 w-8 h-8 rounded-full text-center text-base font-medium text-white bg-red-700 hover:bg-red-500 cursor-pointer'
+          className='flex justify-center items-center absolute right-3 top-3 w-8 h-8 rounded-full text-center text-xl text-white bg-red-700 hover:bg-red-500 cursor-pointer'
           onClick={() => setCloseButton(true)}
         >
-          X
+          <MdOutlineClose/>
         </h3>
 
         <h3
@@ -331,7 +332,7 @@ const NewImageForm = (props) => {
               </input>
               
               <label className='mt-2 ml-1'>
-                Nombre de la imagen: 
+                Nombre de imagen: 
               </label>
               <input
                 type='text'
@@ -351,7 +352,7 @@ const NewImageForm = (props) => {
               </div>
             </div>
 
-            <h3 className='text-center text-lg mt-2'>Lista de filtros</h3>
+            <h3 className='text-center text-lg mt-2'>Etiquetas</h3>
             <div
               className='flex justify-between items-end gap-x-2'
             >
@@ -359,7 +360,7 @@ const NewImageForm = (props) => {
                 className='w-5/12'
               >
                 <label className='ml-1 text-base'>
-                  Filtro: 
+                  Etiqueta: 
                 </label>
                 <input
                   type='text'
