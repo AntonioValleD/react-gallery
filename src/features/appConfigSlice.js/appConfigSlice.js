@@ -31,11 +31,19 @@ export const configSlice = createSlice({
             const configPayload = action.payload.configPayload
 
             state[configName] = configPayload
+        },
+        setProfileImageUrl: (state, action) => {
+            const profileImageUrl = action.payload.profileImageUrl
+
+            state.userInfo.profileImageUrl = profileImageUrl
         }
     }
 })
 
 
-export const { setAppConfig } = configSlice.actions
+export const { 
+    setAppConfig,
+    setProfileImageUrl
+} = configSlice.actions
 
 export default configSlice.reducer

@@ -46,9 +46,9 @@ const Login = () => {
     for (let i = 0; i < userName.length; i++){
       if (userName[i] === " "){
         shortName += userName[i + 1]
-        return shortName
       }
     }
+    return shortName
   }
 
 
@@ -70,7 +70,10 @@ const Login = () => {
 
       let userData = {...data.userInfo}
       userData["shortName"] = nameToShort(data.userInfo.name)
-      userData["profileImageUrl"] = ""
+
+      if (!userData.profileImageUrl){
+        userData["profileImageUrl"] = ""
+      }
 
       dispatch(setAppConfig({
         configName: "userInfo",

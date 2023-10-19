@@ -66,11 +66,27 @@ export const imageSlice = createSlice({
             } else {
                 state.changeCarouselImage = action.payload
             }
+        },
+
+        // Clear data
+        clearImageData: (state) => {
+            state.filteredImageList = []
+            state.imageList = []
+            state.selectedImage = {}
         }
     }
 })
 
 
-export const { saveImageList, editImageTitle, editImageFilters, deleteLocalImage, setSelectedImage, setFilteredImageList, setChangeCarouselImage } = imageSlice.actions
+export const { 
+    saveImageList, 
+    editImageTitle, 
+    editImageFilters, 
+    deleteLocalImage, 
+    setSelectedImage, 
+    setFilteredImageList, 
+    setChangeCarouselImage,
+    clearImageData
+} = imageSlice.actions
 
 export default imageSlice.reducer

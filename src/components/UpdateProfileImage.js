@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { MdOutlineClose } from "react-icons/md"
+import { setProfileImageUrl } from '../features/appConfigSlice.js/appConfigSlice'
 
 
 const UpdateProfileImage = (props) => {
@@ -43,17 +44,18 @@ const UpdateProfileImage = (props) => {
     }
 
     try {
-      await axios.post(`${appConfig.serverUrl}/images`, {
-        title: "Profile image",
+      let profilePicInfo = await axios.post(`${appConfig.serverUrl}/images/profilePic`, {
         file: fileInfo.file,
-        filters: [],
-        profileImage: true,
       }, {
         headers: {
           "Authorization": `JWT ${appConfig.token}`,
           "Content-Type": "multipart/form-data",
         }
       })
+
+      dispatch(setProfileImageUrl({
+        profileImageUrl: profilePicInfo.data.file.profileImageUrl
+      }))
 
       setCloseButton(true)
     } catch (error) {
@@ -134,6 +136,7 @@ const UpdateProfileImage = (props) => {
               </label>
             : 
               <img
+                className='w-64 h-64 rounded-full'
                 alt={userInfo.profileImageUrl}
                 src={userInfo.profileImageUrl}
               />

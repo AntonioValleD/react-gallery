@@ -2,13 +2,15 @@
 import 'animate.css'
 
 // Hook import
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 // Redux reducer import
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { setAppConfig } from '../features/appConfigSlice.js/appConfigSlice'
+import { clearFilterDataData } from '../features/filterSlice/filterListSlice'
+import { clearImageData } from '../features/imageSlice/imageSlice'
 
 // React icons import
 import { BiLogOut } from "react-icons/bi"
@@ -65,7 +67,15 @@ const UserInfo = () => {
         configName: "token",
         configPayload: ""
       }))
+
+      dispatch(setAppConfig({
+        configName: "userInfo",
+        configPayload: {}
+      }))
   
+      dispatch(clearFilterDataData())
+      dispatch(clearImageData())
+
       dispatch(changeModalStatus({
         modalName: "userInfo",
         modalStatus: false
@@ -93,6 +103,11 @@ const UserInfo = () => {
   } else if (modalStatus.tagList){
     modalWindow = <TagList/>
   }
+
+
+  useEffect(() => {
+
+  }, [userInfo.profileImageUrl])
 
 
   return (
@@ -138,6 +153,7 @@ const UserInfo = () => {
                 {userInfo.shortName}
               </label> :
               <img
+                className='w-28 h-28 rounded-full'
                 alt={userInfo.profileImageUrl}
                 src={userInfo.profileImageUrl}
               />

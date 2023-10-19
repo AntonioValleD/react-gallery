@@ -47,11 +47,19 @@ export const filterListSlice = createSlice({
       let activeFilters = [...action.payload.activeFilters]
 
       state.activeFilters = activeFilters
+    },
+    clearFilterDataData: (state) => {
+      state.filterList = []
+      state.activeFilters = []
     }
   }
 })
 
 
-export const { bootstrapFilterList, setActiveFilters } = filterListSlice.actions
+export const { 
+  bootstrapFilterList, 
+  setActiveFilters,
+  clearFilterDataData
+} = filterListSlice.actions
 
 export default filterListSlice.reducer

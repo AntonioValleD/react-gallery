@@ -48,11 +48,19 @@ const Navigation = () => {
         className='rounded-full bg-lime-600 h-10 w-10 flex justify-center items-center cursor-pointer'
         onClick={() => openUserInfo()}
       >
-        <label
-          className='cursor-pointer'
-        >
-          {userInfo.shortName}
-        </label>
+        {
+          userInfo.profileImageUrl === "" ?
+          <label
+            className='cursor-pointer'
+          >
+            {userInfo.shortName}
+          </label> :
+          <img
+            className='w-10 h-10 rounded-full cursor-pointer'
+            alt={userInfo.profileImageUrl}
+            src={userInfo.profileImageUrl}
+          />
+        }
       </div>
     </div>
   )
