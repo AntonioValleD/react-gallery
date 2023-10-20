@@ -112,7 +112,8 @@ const UserInfo = () => {
 
   return (
     <div
-      className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-start justify-end ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
+      className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-start 
+        justify-end ${closeButton ? 'bg-white/0' : 'bg-black/60'}`}
     >
       {modalWindow}
       <Toaster

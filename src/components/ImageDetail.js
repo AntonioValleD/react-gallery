@@ -391,7 +391,9 @@ const ImageDetail = (props) => {
 
   return (
     <div 
-      className={`flex fixed w-screen h-screen top-0 right-0 z-10 items-center justify-center ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
+      className={`flex fixed w-screen h-screen top-0 right-0 items-center 
+        justify-center ${closeButton ? 'bg-white/0' : 'bg-black/60'}`}
+        style={{zIndex: "11"}}
     >
       <Toaster
         toastOptions={{

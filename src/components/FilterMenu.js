@@ -130,7 +130,8 @@ const FilterMenu = () => {
 
   return (
     <div
-      className={`fixed w-screen h-screen top-0 left-0 z-20 flex items-start justify-start ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
+      className={`fixed w-screen h-screen top-0 left-0 z-20 flex items-start 
+        justify-start ${closeButton ? 'bg-white/0' : 'bg-black/60'}`}
     >
       <div 
         className={`h-screen relative p-4 bg-gray-950 shadow-xl shadow-gray-700 text-white animate__animated ${closeButton ? 'animate__fadeOutLeft' : 'animate__fadeInLeft'} animate__faster z-20`}

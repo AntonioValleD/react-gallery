@@ -95,7 +95,8 @@ const TagList = (props) => {
 
   return (
     <div 
-      className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-center justify-center ${closeButton ? 'bg-white/0' : 'bg-black/30'}`}
+      className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-center 
+        justify-center ${closeButton ? 'bg-white/0' : 'bg-black/60'}`}
     >
       <Toaster
         toastOptions={{
