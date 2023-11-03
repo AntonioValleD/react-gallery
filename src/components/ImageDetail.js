@@ -1,40 +1,56 @@
-import React, { useEffect } from 'react'
+// Components
 import axios from 'axios'
-import "animate.css"
 import toast, { Toaster } from 'react-hot-toast'
-import { useSelector, useDispatch } from 'react-redux'
-import { useState, useRef } from 'react'
-import { changeModalStatus } from '../features/modalSlice/modalSlice'
-import { editImageTitle, editImageFilters, deleteLocalImage, setChangeCarouselImage } from '../features/imageSlice/imageSlice'
 import { DateTime } from 'luxon'
+
+// CSS documents
+import "animate.css"
+
+// Redux toolkit hooks
+import { useSelector, useDispatch } from 'react-redux'
+import ImageCarrousel from './ImageCarrousel'
+import TagList from './TagList'
+
+// Redux toolkit reducers
+import { changeModalStatus } from '../features/modalSlice/modalSlice'
+import { 
+  editImageTitle, 
+  editImageFilters, 
+  deleteLocalImage, 
+  setChangeCarouselImage 
+} from '../features/imageSlice/imageSlice'
+
+// React hooks
+import { useState, useRef } from 'react'
+
+// React icons
 import { AiFillEdit } from 'react-icons/ai'
 import { BiSolidSave } from 'react-icons/bi'
 import { HiPlus } from 'react-icons/hi'
 import { AiOutlineClose } from 'react-icons/ai'
 import { RiDeleteBinFill } from 'react-icons/ri'
 import { MdOutlineClose } from "react-icons/md"
-import DataTable from 'react-data-table-component'
-import ImageCarrousel from './ImageCarrousel'
+
 
 const ImageDetail = (props) => {
   // Hooks
   const dispatch = useDispatch()
+
   const appConfig = useSelector(state => state.appConfig)
+
   const currentImage = useSelector(state => state.imageList).selectedImage
+
   const changeImage = useSelector(state => state.imageList).changeCarouselImage
 
 
   // Local component state
   const [selectedImage, setSelectedImage] = useState(currentImage)
+
   const [closeButton, setCloseButton] = useState(false)
+
   const [disableTitle, setDisableTitle] = useState(true)
+
   const [imgTitle, setImgTitle] = useState(selectedImage.title)
-  const [metadataConfig, setMetadataConfig] = useState({
-    configMode: "",
-    disableInputs: true,
-  })
-  const [filters, setFilters] = useState(selectedImage.filters)
-  const [selectedFilter, setSelectedFilter] = useState({})
 
 
   // Close full image modal
@@ -53,266 +69,9 @@ const ImageDetail = (props) => {
   }
 
 
-  // Data table config
-  // Filters data table component
-  const columns = [
-    {
-      id: "main",
-      name: "No.",
-      selector: (row) => row.no,
-      width: "10%",
-      center: true,
-    },
-    {
-      name: "Dato",
-      selector: (row) => row.filterName,
-      width: "35%",
-      center: true
-    },
-    {
-      name: "Valor",
-      selector: (row) => row.filterData,
-      with: '55%',
-      center: true,
-      wrap: true
-    },
-  ]
-
-  const customStyles = {
-    headCells: {
-      style: {
-        borderBottom: "1px solid black",
-        backgroundColor: 'rgb(23 37 84)',
-        color: 'white',
-        paddingLeft: "8px",
-        paddingRight: "0px",
-        fontSize: "13px",
-        textAlign: 'center',
-      }
-    },
-    cells: {
-      style: {
-        fontSize: "12px",
-        paddingRight: "0px",
-        paddingLeft: "0px",
-        textAlign: 'center',
-        userSelect: 'none',
-      },
-    },
-    table: {
-      style: {
-        minHeight: "240px",
-      }
-    },
-  }
-
-  const conditionalRowStyles = [
-    {
-      when: row => parseInt(row.no) % 2 !== 0,
-      style: {
-        backgroundColor: '#dddddd',
-      }
-    },
-    {
-      when: row => parseInt(row.no) === selectedFilter.no,
-      style: {
-        backgroundColor: 'green',
-        color: "white"
-      }
-    },
-  ]
-
-
   // Input references
   const titleInputRef = useRef(null)
-  const filterNameInputRef = useRef(null)
-  const filterDataInputRef = useRef(null)
 
-
-  // Metadata futton functions
-  const addNewFilter = () => {
-    setSelectedFilter({
-      filterName: "",
-      filterData: ""
-    })
-    setMetadataConfig({
-      configMode: "Add",
-      disableInputs: false,
-    })
-  }
-
-  const cancelMetadataOperation = () => {
-    setSelectedFilter({
-      filterName: "",
-      filterData: ""
-    })
-    setMetadataConfig({
-      configMode: "",
-      disableInputs: true,
-    })
-  }
-
-  const editFilter = () => {
-    if (!selectedFilter.filterName || selectedFilter.filterName === ""){
-      return
-    }
-    setMetadataConfig({
-      configMode: "Edit",
-      disableInputs: false,
-    })  
-  }
-
-  const checkFilterData = () => {
-    if (selectedFilter.filterName === ""){
-      filterNameInputRef.current.focus()
-      return false
-    } else if (selectedFilter.filterData === ""){
-      filterDataInputRef.current.focus()
-      return false
-    } else {
-      return true
-    }
-  }
-
-  const saveFilter = async () => {
-    if (!checkFilterData()){
-      return
-    }
-
-    let allImgFilters
-    switch (metadataConfig.configMode){
-      case "Add":
-        let newFilter
-
-        if (filters && filters.length > 0){
-          allImgFilters = [...filters]
-        } else {
-          allImgFilters = []
-        }
-
-        newFilter = {
-          ...selectedFilter,
-          no: allImgFilters.length + 1,
-        }
-
-        allImgFilters.push(newFilter)
-
-        try {
-          await axios.patch(`${appConfig.serverUrl}/images`, {
-            id: selectedImage._id,
-            filters: allImgFilters
-          }, {
-            headers: {
-              "Authorization": `JWT ${appConfig.token}`,
-              "Content-Type": "application/json"
-            }
-          })
-
-          dispatch(editImageFilters({
-            id: selectedImage._id,
-            filters: allImgFilters,
-          }))
-
-          toast.success("Información guardada correctamente")
-
-          setFilters(allImgFilters)
-
-          setSelectedFilter({
-            filterName: "",
-            filterData: "",
-          })
-        } catch (error) {
-          toast.error("No se pudo guardar la información")
-        }
-        break
-      
-      case "Edit": 
-        allImgFilters = [...filters]
-
-        allImgFilters[allImgFilters.indexOf(allImgFilters.find(imgFilter => imgFilter.no === selectedFilter.no))] = selectedFilter
-
-        try {
-          await axios.patch(`${appConfig.serverUrl}/images`, {
-            id: selectedImage._id,
-            filters: allImgFilters
-          }, {
-            headers: {
-              "Authorization": `JWT ${appConfig.token}`,
-              "Content-Type": "application/json"
-            }
-          })
-
-          setFilters([...allImgFilters])
-
-          setSelectedFilter({
-            filterName: "",
-            filterData: "",
-          })
-
-          toast.success("Información guardada correctamente")
-        } catch (error) {
-          toast.error("No se pudo guardar la información")
-        }
-
-        break
-      default:
-        break
-    }
-
-
-    setMetadataConfig({
-      configMode: "",
-      disableInputs: true,
-    })
-  }
-
-  const deleteFilter = async () => {
-    if (!selectedFilter.no){
-      return
-    }
-
-    let allFilters = []
-    let counter = 1
-    filters.forEach((filter) => {
-      if (selectedFilter.no !== filter.no){
-        let newFilter = {
-          filterName: filter.filterName,
-          filterData: filter.filterData,
-          no: counter
-        }
-        allFilters.push(newFilter)
-        counter ++
-      }
-    })
-
-    try {
-      await axios.patch(`${appConfig.serverUrl}/images`, {
-        id: selectedImage._id,
-        filters: allFilters
-      }, {
-        headers: {
-          "Authorization": `JWT ${appConfig.token}`,
-          "Content-Type": "application/json"
-        }
-      })
-
-      dispatch(editImageFilters({
-        id: selectedImage._id,
-        filters: allFilters,
-      }))
-
-      toast.success("Información guardada correctamente")
-
-      setFilters(allFilters)
-
-      setSelectedFilter({
-        filterName: "",
-        filterData: "",
-      })
-    } catch (error) {
-      toast.error("No se pudo guardar la información")
-    }
-  }
 
   const editImage = async (inputName) => {
     if (inputName === "title"){
@@ -377,15 +136,6 @@ const ImageDetail = (props) => {
       console.log(error);
       toast.error("La imagen no pudo ser eliminada")
     }
-  }
-
-
-  // Handle filter input values
-  const filterInputValues = (event) => {
-    setSelectedFilter({
-      ...selectedFilter,
-      [event.target.name]: event.target.value
-    })
   }
 
 
@@ -504,103 +254,14 @@ const ImageDetail = (props) => {
             </div>
 
             <div className='flex items-center justify-center mt-4'>
-              <div className='flex items-center justify-center gap-x-1'>
-                <label
-                  className='flex text-lg text-white'
-                >
-                  {
-                    metadataConfig.disableInputs ?
-                    <HiPlus 
-                      title='Nuevo'
-                      className='hover:text-lime-400 cursor-pointer'
-                      onClick={() => addNewFilter()}
-                    /> :
-                    <AiOutlineClose 
-                      title='Cancelar'
-                      className='hover:text-red-400 cursor-pointer'
-                      onClick={() => cancelMetadataOperation()}
-                    />
-                  }
-                </label>
-                <label
-                  className='cursor-pointer flex gap-x-1'
-                >
-                  {
-                    metadataConfig.disableInputs ? 
-                    <AiFillEdit 
-                      title='Editar'
-                      className='hover:text-yellow-300'
-                      onClick={() => editFilter()}
-                    /> : 
-                    <BiSolidSave 
-                      title='Guardar'
-                      className='hover:text-lime-400'
-                      onClick={() => saveFilter()}
-                    />
-                  }
-                  <RiDeleteBinFill
-                    title='Eliminar'
-                    className='hover:text-red-400 cursor-pointer'
-                    onClick={() => deleteFilter()}
-                  />
-                </label>
-              </div>
-
-              <label className='px-2 text-lg select-none'>
+              <label className='px-2 text-xl select-none'>
                 Etiquetas
               </label>
-            </div>
+              
+              {
 
-            <div
-              className="flex justify-between w-full"
-            >
-              <div className='flex flex-col'>
-                <label className='px-1 select-none'>
-                  Etiqueta:
-                </label>
-                <input className={`px-1 text-center rounded ${metadataConfig.disableInputs ? 'text-white' : 'text-black'}`}
-                  disabled={metadataConfig.disableInputs}
-                  value={selectedFilter.filterName}
-                  name="filterName"
-                  ref={filterNameInputRef}
-                  onChange={(event) => filterInputValues(event)}
-                />
-              </div>
+              }
 
-              <div className='flex flex-col'>
-                <label className='px-1 select-none'>
-                  Valor:
-                </label>
-                <input className={`px-1 text-center rounded ${metadataConfig.disableInputs ? 'text-white' : 'text-black'}`}
-                  disabled={metadataConfig.disableInputs}
-                  value={selectedFilter.filterData}
-                  name="filterData"
-                  ref={filterDataInputRef}
-                  onChange={(event) => filterInputValues(event)}
-                />
-              </div>
-            </div>
-
-            <div
-              className='rounded mt-2'
-            >
-              <DataTable
-                columns={columns}
-                data={filters}
-                responsive
-                dense={true}
-                striped
-                selectableRowsHighlight
-                highlightOnHover
-                customStyles={customStyles}
-                defaultSortFieldId={'main'}
-                defaultSortAsc={true}
-                fixedHeader
-                persistTableHead
-                fixedHeaderScrollHeight='240px'
-                conditionalRowStyles={conditionalRowStyles}
-                onRowClicked={(row) => setSelectedFilter(row)}
-              />
             </div>
           </div>
         </div>

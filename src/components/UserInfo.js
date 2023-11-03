@@ -101,7 +101,9 @@ const UserInfo = () => {
   if (modalStatus.updateProfileImage){
     modalWindow = <UpdateProfileImage/>
   } else if (modalStatus.tagList){
-    modalWindow = <TagList/>
+    modalWindow = <TagList
+      update={true}
+    />
   }
 
 

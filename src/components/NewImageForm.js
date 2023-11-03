@@ -1,13 +1,18 @@
-import React from 'react'
+// Components 
 import axios from 'axios'
-import { useState, useRef } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import { changeModalStatus } from '../features/modalSlice/modalSlice'
+
+// React hooks
+import { useState, useRef, useEffect } from 'react'
+
+// Redux toolkit hooks
 import { useDispatch, useSelector } from 'react-redux'
+
+// Redux toolkit reducers
+import { changeModalStatus } from '../features/modalSlice/modalSlice'
+
+// React icons
 import { MdOutlineClose } from "react-icons/md"
-import DataTable from 'react-data-table-component'
-import addFilterImg from "../assets/img/New green.png"
-import deleteFilterImg from "../assets/img/Eliminar red.png"
 
 
 const NewImageForm = (props) => {
@@ -22,15 +27,7 @@ const NewImageForm = (props) => {
     file: "",
   })
 
-  const [filterInfo, setFilterInfo] = useState({
-    no: "",
-    filterName: "",
-    filterData: ""
-  })
-
-  const [filters, setFilters] = useState([])
-
-  const [selectedFilter, setSelectedFilter] = useState()
+  const [imageTags, setImageTags] = useState([])
 
   const [closeButton, setCloseButton] = useState(false)
 
@@ -43,6 +40,7 @@ const NewImageForm = (props) => {
     })
   }
 
+
   // Handle title input value
   const titleInputHandler = (event) => {
     setFileInfo({
@@ -52,73 +50,19 @@ const NewImageForm = (props) => {
   }
 
 
-  // Filter functions
-  // Input references
-  const filterNameInputRef = useRef(null)
-  const filterDataInputRef = useRef(null)
-
-  // Handle selected filter
-  const selectFilter = (no) => {
-    setSelectedFilter(no)
-  }
-
-  // Handle filter info values
-  const filterInputValues = (event) => {
-    setFilterInfo({
-      ...filterInfo,
-      [event.target.name]: event.target.value,
+  // Handle image tag inputs
+  const imageTagsInput = (event) => {
+    setImageTags({
+      ...imageTags,
+      [event.target.name]: event.target.value
     })
-  }
-
-  // Add filter
-  const addNewFilter = () => {
-    if (filterInfo.filterName === ""){
-      filterNameInputRef.current.focus()
-      return
-    } else if (filterInfo.filterData === ""){
-      filterDataInputRef.current.focus()
-      return
-    }
-
-    let newFilter = {...filterInfo}
-    newFilter.no = filters.length + 1
-
-    setFilters([
-      ...filters,
-      newFilter
-    ])
-
-    setFilterInfo({
-      no: "",
-      filterName: "",
-      filterData: ""
-    })
-  }
-
-  // Delete filter
-  const deleteFilter = () => {
-    if (selectedFilter === ""){
-      return
-    }
-
-    let filterList = [...filters]
-    filterList.splice(filterList.indexOf(filterList.find(filter => parseInt(filter.no) === parseInt(selectedFilter))), 1)
-
-    let counter = 1
-    filterList.forEach((filter) => {
-      filter.no = counter
-      counter ++
-    })
-
-    setFilters(filterList)
-
-    setSelectedFilter("")
   }
 
 
   // Submit inputs references
   const titleInputRef = useRef(null)
   const fileInputRef = useRef(null)
+
 
   // Submit image function
   const submitImage = async () => {
@@ -134,7 +78,7 @@ const NewImageForm = (props) => {
       await axios.post(`${appConfig.serverUrl}/images`, {
         title: fileInfo.title,
         file: fileInfo.file,
-        filters: JSON.stringify(filters),
+        tags: JSON.stringify(imageTags),
       }, {
         headers: {
           "Authorization": `JWT ${appConfig.token}`,
@@ -149,25 +93,6 @@ const NewImageForm = (props) => {
       toast.error("The image already exists")
     }
   }
-
-
-  // Getting images from database
-  // const fetchImages = async () => {
-  //   try {
-  //     const response = await axios.get(`${appConfig.serverUrl}/images`, {
-  //       headers: {
-  //         Authorization: `JWT ${appConfig.token}`
-  //       }
-  //     })
-
-  //     dispatch(saveImageList({
-  //       imageList: response.data
-  //     }))
-
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
 
   // Close new image form
@@ -190,73 +115,15 @@ const NewImageForm = (props) => {
   }
 
 
-  // Filters data table component
-  const columns = [
-    {
-      id: "main",
-      name: "No.",
-      selector: (row) => row.no,
-      width: "10%",
-      center: true,
-    },
-    {
-      name: "Filtro",
-      selector: (row) => row.filterName,
-      width: "35%",
-      center: true
-    },
-    {
-      name: "Valor",
-      selector: (row) => row.filterData,
-      with: '55%',
-      center: true,
-      wrap: true
-    },
-  ]
+  useEffect(() => {
+    let tagObject = {}
 
-  const customStyles = {
-    headCells: {
-      style: {
-        borderBottom: "1px solid black",
-        backgroundColor: 'rgb(23 37 84)',
-        color: 'white',
-        paddingLeft: "8px",
-        paddingRight: "0px",
-        fontSize: "13px",
-        textAlign: 'center',
-      }
-    },
-    cells: {
-      style: {
-        fontSize: "12px",
-        paddingRight: "0px",
-        paddingLeft: "0px",
-        textAlign: 'center',
-        userSelect: 'none',
-      },
-    },
-    table: {
-      style: {
-        minHeight: "150px",
-      }
-    },
-  }
+    appConfig.userInfo.tags.forEach((tag) => {
+      tagObject[tag] = ""
+    })
 
-  const conditionalRowStyles = [
-    {
-      when: row => parseInt(row.no) % 2 !== 0,
-      style: {
-        backgroundColor: '#dddddd',
-      }
-    },
-    {
-      when: row => parseInt(row.no) === parseInt(selectedFilter),
-      style: {
-        backgroundColor: 'green',
-        color: "white"
-      }
-    },
-  ];
+    setImageTags(tagObject)
+  }, [])
 
 
   return (
@@ -353,82 +220,34 @@ const NewImageForm = (props) => {
               </div>
             </div>
 
-            <h3 className='text-center text-lg mt-2'>Etiquetas</h3>
+            <h3 className='text-center text-lg my-2'>Etiquetas</h3>
+
             <div
-              className='flex justify-between items-end gap-x-2'
+              className={`${appConfig.userInfo.tags.length >= 7 ?
+                "overflow-y-scroll" : ""}`}
+              style={{maxHeight: "200px"}}
             >
-              <div
-                className='w-5/12'
-              >
-                <label className='ml-1 text-base'>
-                  Etiqueta: 
-                </label>
-                <input
-                  type='text'
-                  value={filterInfo.filterName}
-                  name='filterName'
-                  ref={filterNameInputRef}
-                  className='py-px text-sm text-black pl-1 mb-1 rounded w-full bg-gray-50'
-                  onChange={(event) => filterInputValues(event)}
-                >
-                </input>
-              </div>
+              {
+                appConfig.userInfo.tags.map((tagName) => (
+                  <div
+                    key={tagName}
+                    className='flex justify-between items-center mb-2 px-2'
+                  >
+                    <label
+                      className='w-4/12'
+                    >
+                      {tagName}
+                    </label>
 
-              <div
-                className='w-5/12'
-              >
-                <label className='ml-1 text-base'>
-                  Valor: 
-                </label>
-                <input
-                  type='text'
-                  value={filterInfo.filterData}
-                  name='filterData'
-                  ref={filterDataInputRef}
-                  className='py-px text-sm text-black pl-1 mb-1 rounded w-full bg-gray-50'
-                  onChange={(event) => filterInputValues(event)}
-                >
-                </input>
-              </div>
-
-              <div
-                className='flex items-center gap-x-1'
-              >
-                <img
-                  alt='addFilter'
-                  src={addFilterImg}
-                  className='h-5 mb-1 cursor-pointer'
-                  onClick={() => addNewFilter()}
-                />
-
-                <img
-                  alt='deleteFilter'
-                  src={deleteFilterImg}
-                  className='h-6 mb-1 cursor-pointer'
-                  onClick={() => deleteFilter()}
-                />
-              </div>
-            </div>
-            <div
-              className='rounded'
-            >
-              <DataTable
-                columns={columns}
-                data={filters}
-                responsive
-                dense={true}
-                striped
-                selectableRowsHighlight
-                highlightOnHover
-                customStyles={customStyles}
-                defaultSortFieldId={'main'}
-                defaultSortAsc={true}
-                fixedHeader
-                persistTableHead
-                fixedHeaderScrollHeight='150px'
-                conditionalRowStyles={conditionalRowStyles}
-                onRowClicked={(row) => selectFilter(row.no)}
-              />
+                    <input
+                      value={imageTags[tagName]}
+                      name={tagName}
+                      className='text-black w-8/12 rounded px-1'
+                      onChange={(event) => imageTagsInput(event)}
+                    />
+                  </div>
+                ))
+              }
             </div>
           </div>
         </div>

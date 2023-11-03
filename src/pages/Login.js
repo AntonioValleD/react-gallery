@@ -85,7 +85,7 @@ const Login = () => {
       toast.loading("Cargando imagenes...")
       setTimeout(() => {
         navigate(`/images`)
-      }, "2000")
+      }, 2000)
 
     } catch (error) {
       console.log(error);
@@ -156,7 +156,7 @@ const Login = () => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 3000,
+          duration: 1700,
           style: {
             background: '#363636',
             color: '#fff',

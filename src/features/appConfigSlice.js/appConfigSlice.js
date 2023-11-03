@@ -7,7 +7,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     token: "",
-    serverUrl: "https://image-gallery-server.fly.dev" ,
+    serverUrl: "http://localhost:4000",
     userInfo: {
         id: "",
         name: "",
@@ -18,6 +18,7 @@ const initialState = {
         registerDate: "",
         shortName: "",
         profileImageUrl: "",
+        tags: []
     }
 }
 
@@ -36,6 +37,15 @@ export const configSlice = createSlice({
             const profileImageUrl = action.payload.profileImageUrl
 
             state.userInfo.profileImageUrl = profileImageUrl
+        },
+        setUserData: (state, action) => {
+          const dataName = action.payload.dataName
+          const dataInfo = action.payload.dataInfo
+
+          const userInfo = state.userInfo
+          if (userInfo){
+            userInfo[dataName] = dataInfo
+          }
         }
     }
 })
@@ -43,7 +53,8 @@ export const configSlice = createSlice({
 
 export const { 
     setAppConfig,
-    setProfileImageUrl
+    setProfileImageUrl,
+    setUserData
 } = configSlice.actions
 
 export default configSlice.reducer

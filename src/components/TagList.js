@@ -1,12 +1,15 @@
 // Hook import
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Component import
+import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 
 // Redux reducer import
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
+import { setUserData } from '../features/appConfigSlice.js/appConfigSlice'
 
 // React icons import
 import { MdOutlineClose } from "react-icons/md"
@@ -18,6 +21,7 @@ import { AiFillEdit } from "react-icons/ai"
 
 const TagList = (props) => {
   // Hooks
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const appConfig =  useSelector(state => state.appConfig)
 
@@ -45,10 +49,15 @@ const TagList = (props) => {
   // Close new image form
   const closeTagList = () => {
     if (closeButton){
-      dispatch(changeModalStatus({
-        modalName: "tagList",
-        modalStatus: false
-      }))
+      if (props.update){
+        dispatch(changeModalStatus({
+          modalName: "tagList",
+          modalStatus: false
+        }))
+
+      } else {
+        navigate("/images")
+      }
     }
   }
 
@@ -93,6 +102,34 @@ const TagList = (props) => {
   }
 
 
+  // Save tag list
+  const saveTagList = async () => {
+    if (tagListArray.length === 0){
+      toast.error("Debe agregar por lo menos una etiqueta para continuar")
+    } else {
+      dispatch(setUserData({
+        dataName: "tags",
+        dataInfo: [...tagListArray]
+      }))
+
+      await axios.patch(`${appConfig.serverUrl}/auth/users`, {
+        email: appConfig.userInfo.email,
+        tags: [...tagListArray]
+      }, {
+        headers: {
+          Authorization: `JWT ${appConfig.token}`
+        }
+      })
+
+      toast.success("Etiquetas guardadas con exito")
+
+      setTimeout(() => {
+        setCloseButton(true)
+      }, 1700)
+    }
+  }
+
+
   return (
     <div 
       className={`fixed w-screen h-screen top-0 right-0 z-20 flex items-center 
@@ -101,7 +138,7 @@ const TagList = (props) => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 3000,
+          duration: 1700,
           style: {
             background: '#363636',
             color: '#fff',
@@ -112,16 +149,20 @@ const TagList = (props) => {
 
       <div 
         className={`relative rounded-lg p-4 bg-gray-950 shadow-xl shadow-gray-700 text-white animate__animated ${closeButton ? 'animate__fadeOut' : 'animate__fadeIn'} flex flex-col animate__faster`}
-        style={{ width: "230px", maxHeight: "400px" }}
+        style={{ width: "230px", maxHeight: "350px" }}
         onAnimationEnd={() => closeTagList()}
       >
-        <h3
-          className='flex justify-center items-center absolute right-2 top-2 w-8 h-8 rounded-full text-center text-xl text-white bg-red-700 hover:bg-red-500 cursor-pointer'
-          onClick={() => setCloseButton(true)}
-          title='Cerrar'
-        >
-          <MdOutlineClose/>
-        </h3>
+        {
+          props.update ?
+          <h3
+            className='flex justify-center items-center absolute right-2 top-2 w-8 h-8 rounded-full text-center text-xl text-white bg-red-700 hover:bg-red-500 cursor-pointer'
+            onClick={() => setCloseButton(true)}
+            title='Cerrar'
+          >
+            <MdOutlineClose/>
+          </h3> :
+          ""
+        }
 
         <h3
           className='text-center text-xl'
@@ -130,7 +171,8 @@ const TagList = (props) => {
         </h3>
 
         <div
-          className={`my-2 ${tagListArray.length >= 10 ? "overflow-y-scroll" : ""}`}
+          className={`my-2 ${tagListArray.length >= 10 ? "overflow-y-scroll"
+            : ""}`}
         >
           {
             tagListArray.map((tag) => (
@@ -138,7 +180,8 @@ const TagList = (props) => {
                 key={tag}
               >
                 <div
-                  className='py-px px-2 flex justify-between items-center hover:bg-gray-800 transition-all duration-75'
+                  className='py-px px-2 flex justify-between items-center
+                    hover:bg-gray-800 transition-all duration-75'
                   onMouseEnter={() => setHoverTag(tag)}
                   onMouseLeave={() => setHoverTag("")}
                   onDoubleClick={() => setComponentActions({
@@ -158,6 +201,7 @@ const TagList = (props) => {
                         className='flex gap-x-1'
                       >
                         <label
+                          title='Editar etiqueta'
                           className='hover:text-yellow-400 transition-all duration-75 cursor-pointer'
                           onClick={() => setComponentActions({
                             ...componentActions,
@@ -168,6 +212,7 @@ const TagList = (props) => {
                         </label>
 
                         <label
+                          title='Eliminar etiqueta'
                           className='hover:text-red-400 transition-all duration-75 cursor-pointer'
                           onClick={() => deleteTag(tag)}
                         >
@@ -238,7 +283,7 @@ const TagList = (props) => {
 
           <h3
             className='flex justify-center items-center w-8 h-8 rounded-full text-center text-xl text-white bg-lime-800 hover:bg-lime-600 cursor-pointer'
-            onClick={() => setCloseButton(true)}
+            onClick={() => saveTagList()}
             title='Guardar cambios'
           >
             <AiFillSave/>

@@ -121,10 +121,11 @@ const ImageGallery = () => {
   useEffect(() => {
     if (appConfig.token === ""){
       navigate("/")
+    } else if (appConfig.userInfo.tags.length === 0){
+      navigate("/tags")
     }
     checkFilteredList()
   }, [appConfig, filteredImageList, imageList])
-
 
 
   return (
