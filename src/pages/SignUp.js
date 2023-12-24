@@ -61,7 +61,7 @@ const SignUp = () => {
       await axios.post(`${appConfig.serverUrl}/auth/signup`, userInfo)
       toast.success("Cuenta de usuario creada correctamente!")
       setTimeout(() => {
-        navigate("/")
+        navigate("/Login")
       }, "2000")
 
     } catch (error) {
@@ -253,7 +253,7 @@ const SignUp = () => {
           >
             ¿Ya tienes una cuenta? <span 
               className="underline hover:text-blue-200 cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/Login")}
             >
               Inicia sesión aquí
             </span>

@@ -72,17 +72,20 @@ const FilterMenu = () => {
     let filteredImageList = []
 
     imageList.forEach((image) => {
-      image.filters.forEach((filter) => {
-        let foundFilter = selectedFilters.find(data => data === filter.filterData.toLowerCase())
-
-        if (foundFilter){
-          let foundImage = filteredImageList.find(found => found._id === image._id)
-
-          if (!foundImage){
-            filteredImageList.push(image)
+      console.log(image);
+      if (image.tags){
+        image.tags.forEach((filter) => {
+          let foundFilter = selectedFilters.find(data => data === filter.filterData.toLowerCase())
+  
+          if (foundFilter){
+            let foundImage = filteredImageList.find(found => found._id === image._id)
+  
+            if (!foundImage){
+              filteredImageList.push(image)
+            }
           }
-        }
-      })
+        })
+      }
     })
 
     dispatch(setFilteredImageList({
