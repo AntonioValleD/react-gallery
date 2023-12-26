@@ -3,8 +3,8 @@ import './Landing.css'
 import 'animate.css'
 
 // Assets
-import vid1 from '../assets/video/vid1.mp4'
-import vid2 from '../assets/video/vid2.mp4'
+import vid2 from '../assets/video/vid1.mp4'
+import vid1 from '../assets/video/vid2.mp4'
 
 // React hooks
 import { useNavigate } from "react-router-dom"
@@ -120,24 +120,6 @@ const Landing = () => {
               onClick={() => goToSignUp()}
             >
               Sign Up
-            </button>
-
-            <button
-              className="navigationButtons"
-            >
-              Log Out
-            </button>
-
-            <button
-              className="navigationButtons"
-            >
-              My Images
-            </button>
-
-            <button
-              className="navigationButtons"
-            >
-              My Tags
             </button>
           </div>
         </div>
