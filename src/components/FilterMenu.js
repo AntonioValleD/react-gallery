@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 // Redux toolkit reducers
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { 
-  setActiveFilters, 
-  bootstrapFilterList 
+  setActiveFilters,
+  bootstrapFilterList
 } from '../features/filterSlice/filterListSlice'
 import { setFilteredImageList } from '../features/imageSlice/imageSlice'
 import { GiCheckMark } from "react-icons/gi"
@@ -23,6 +23,7 @@ const FilterMenu = () => {
 
 
   // Redux state
+  const appConfig = useSelector(state => state.appConfig)
   const imageList = useSelector(state => state.imageList).imageList
   const filterList = useSelector(state => state.filterList).filterList
   const activeFilters = useSelector(state => state.filterList).activeFilters
@@ -72,7 +73,6 @@ const FilterMenu = () => {
     } else {
       setFullFliterName([...fullFilterName, filterName])
       setAnimationController([...fullFilterName, filterName])
-      console.log(fullFilterName)
     }
   }
 
@@ -80,23 +80,6 @@ const FilterMenu = () => {
   // Filtered image list constructor
   const filterImageList = () => {
     let filteredImageList = []
-
-    imageList.forEach((image) => {
-      console.log(image);
-      if (image.tags){
-        image.tags.forEach((filter) => {
-          let foundFilter = selectedFilters.find(data => data === filter.filterData.toLowerCase())
-  
-          if (foundFilter){
-            let foundImage = filteredImageList.find(found => found._id === image._id)
-  
-            if (!foundImage){
-              filteredImageList.push(image)
-            }
-          }
-        })
-      }
-    })
 
     dispatch(setFilteredImageList({
       filteredImageList: filteredImageList
@@ -130,14 +113,12 @@ const FilterMenu = () => {
   }
 
 
-  const bootFilter = () => {
-    dispatch(bootstrapFilterList(imageList))
-  }
-
-
   useEffect(() => {
     filterImageList()
-    bootFilter()
+    dispatch(bootstrapFilterList({
+      imageList: imageList,
+      tagList: appConfig.userInfo.tags
+    }))
   }, [])
 
 
@@ -174,13 +155,15 @@ const FilterMenu = () => {
               className='cursor-pointer select-none hover:text-blue-400'
               onClick={() => showFilterData(filter.filterName)}
             >
-              {`${filter.filterName}`}
+              {filter.filterName}
             </h1>
             {
-              fullFilterName.find(fName => fName === filter.filterName) ?
+              fullFilterName.find(filterTag => filterTag === filter.filterName) ? 
               filter.filterData.map((data) => (
                 <div
-                  className={`ml-3 cursor-pointer hover:text-lime-400 animate__animated animate__faster ${animationController.find(fName => fName === filter.filterName) ? 'animate__slideInLeft': 'animate__slideOutLeft'}`}
+                  className={`ml-3 cursor-pointer hover:text-lime-400 animate__animated 
+                    animate__faster ${animationController.find(fName => fName === filter.filterName) ? 
+                    'animate__slideInLeft': 'animate__slideOutLeft'}`}
                   key={data}
                   onClick={() => selectFilterOption(data)}
                 >
@@ -196,8 +179,7 @@ const FilterMenu = () => {
                     {camelCase(data)}
                   </label>
                 </div>
-              )) :
-              <div></div>
+              )) : null
             }
           </div>
         ))}
