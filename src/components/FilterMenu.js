@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from 'react'
+// React hooks
+import { useEffect, useState } from 'react'
+
+// CSS documents
 import 'animate.css'
+
+//Redux toolkit hooks
 import { useSelector, useDispatch } from 'react-redux'
+
+// Redux toolkit reducers
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
-import { setActiveFilters, bootstrapFilterList } from '../features/filterSlice/filterListSlice'
+import { 
+  setActiveFilters, 
+  bootstrapFilterList 
+} from '../features/filterSlice/filterListSlice'
 import { setFilteredImageList } from '../features/imageSlice/imageSlice'
 import { GiCheckMark } from "react-icons/gi"
 

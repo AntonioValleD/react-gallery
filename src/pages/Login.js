@@ -1,13 +1,23 @@
-import React from "react"
+// API manager
 import axios from "axios"
+
+// CSS documents
 import "./Login.css"
+
+// Redux toolkit hooks
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
-import { setAppConfig } from "../features/appConfigSlice.js/appConfigSlice"
-import toast, { Toaster } from 'react-hot-toast'
+
+// Redux toolkit reducers
 import { saveImageList } from '../features/imageSlice/imageSlice'
 import { bootstrapFilterList } from "../features/filterSlice/filterListSlice"
+import { setAppConfig } from "../features/appConfigSlice.js/appConfigSlice"
+
+// React hooks
+import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+
+// Componernts
+import toast, { Toaster } from 'react-hot-toast'
 
 
 const Login = () => {
@@ -18,10 +28,12 @@ const Login = () => {
 
   // State constants
   const appConfig = useSelector(state => state.appConfig)
+
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   })
+
   const [showPassword, setShowPassword] = useState(false)
 
 
@@ -80,7 +92,7 @@ const Login = () => {
         configPayload: userData,
       }))
 
-      await fetchImages(data.token)
+      await fetchImages(data.token, userData.tags)
 
       toast.loading("Cargando imagenes...")
       setTimeout(() => {
@@ -120,7 +132,7 @@ const Login = () => {
 
 
   // Getting images from database
-  const fetchImages = async (token) => {
+  const fetchImages = async (token, tagList) => {
     try {
       const response = await axios.get(`${appConfig.serverUrl}/images`, {
         headers: {
@@ -132,7 +144,10 @@ const Login = () => {
         imageList: response.data
       }))
 
-      dispatch(bootstrapFilterList(response.data))
+      dispatch(bootstrapFilterList({
+        imageList: response.data,
+        tagList: tagList
+      }))
 
     } catch (error) {
       console.log(error)
@@ -156,7 +171,7 @@ const Login = () => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 1700,
+          duration: 800,
           style: {
             background: '#363636',
             color: '#fff',

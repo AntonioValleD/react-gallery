@@ -28,7 +28,6 @@ const Landing = () => {
   const navigate = useNavigate()
 
   const screenWidth = useScreenSize().width
-  const screenHeight = useScreenSize().height
 
 
   // Local component state

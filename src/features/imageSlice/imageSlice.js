@@ -29,13 +29,13 @@ export const imageSlice = createSlice({
                 foundImage["title"] = title
             }
         },
-        editImageFilters: (state, action) => {
+        editImageTags: (state, action) => {
             const id = action.payload.id
-            const filters = [...action.payload.filters] 
+            const tags = {...action.payload.tags}
 
             const selectedImage = state.imageList.find(image => image._id === id)
             if (selectedImage){
-                selectedImage["filters"] = filters
+                selectedImage["tags"] = tags
             }
         },
 
@@ -81,7 +81,7 @@ export const imageSlice = createSlice({
 export const { 
     saveImageList, 
     editImageTitle, 
-    editImageFilters, 
+    editImageTags, 
     deleteLocalImage, 
     setSelectedImage, 
     setFilteredImageList, 

@@ -138,7 +138,7 @@ const ImageGallery = () => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 3000,
+          duration: 2000,
           style: {
             background: '#363636',
             color: '#fff',
@@ -148,7 +148,10 @@ const ImageGallery = () => {
       />
 
       <label
-        className='bg-lime-700 hover:bg-white text-white hover:text-lime-700 border-2 hover:font-medium border-lime-700 text-4xl rounded-full fixed bottom-8 right-10 z-10 w-14 h-14 flex justify-center items-center pb-2 cursor-pointer animate__animated newImgAnimation'
+        className='bg-lime-700 hover:bg-white text-white hover:text-lime-700 
+          border-2 hover:font-medium border-lime-700 text-4xl rounded-full fixed 
+          bottom-8 right-10 z-10 w-14 h-14 flex justify-center items-center pb-2 
+          cursor-pointer animate__animated newImgAnimation'
         onClick={() => openNewImageForm()}
         onMouseEnter={() => setNewImageHover(true)}
         onMouseLeave={() => setNewImageHover(false)}

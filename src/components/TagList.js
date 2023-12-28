@@ -27,12 +27,7 @@ const TagList = (props) => {
 
 
   // Local component state
-  const [tagListArray, setTagListArray] = useState([
-    "Lugar",
-    "Fecha",
-    "Evento",
-    "Persona"
-  ])
+  const [tagListArray, setTagListArray] = useState(appConfig.userInfo.tags)
 
   const [closeButton, setCloseButton] = useState(false)
 
@@ -149,7 +144,7 @@ const TagList = (props) => {
 
       <div 
         className={`relative rounded-lg p-4 bg-gray-950 shadow-xl shadow-gray-700 text-white animate__animated ${closeButton ? 'animate__fadeOut' : 'animate__fadeIn'} flex flex-col animate__faster`}
-        style={{ width: "230px", maxHeight: "350px" }}
+        style={{ width: "230px", maxHeight: "410px" }}
         onAnimationEnd={() => closeTagList()}
       >
         {
@@ -171,7 +166,7 @@ const TagList = (props) => {
         </h3>
 
         <div
-          className={`my-2 ${tagListArray.length >= 10 ? "overflow-y-scroll"
+          className={`my-2 ${tagListArray.length > 9 ? "overflow-y-scroll"
             : ""}`}
         >
           {
@@ -271,7 +266,8 @@ const TagList = (props) => {
           className='flex justify-center gap-x-8 mt-1'
         >
           <h3
-            className='flex justify-center items-center w-8 h-8 rounded-full text-center text-xl text-white bg-lime-800 hover:bg-lime-600 cursor-pointer'
+            className='flex justify-center items-center w-8 h-8 rounded-full text-center 
+              text-xl text-white bg-lime-800 hover:bg-lime-600 cursor-pointer'
             onClick={() => setComponentActions({
               ...componentActions,
               addNewTag: true
@@ -282,7 +278,8 @@ const TagList = (props) => {
           </h3>
 
           <h3
-            className='flex justify-center items-center w-8 h-8 rounded-full text-center text-xl text-white bg-lime-800 hover:bg-lime-600 cursor-pointer'
+            className='flex justify-center items-center w-8 h-8 rounded-full text-center 
+              text-xl text-white bg-lime-800 hover:bg-lime-600 cursor-pointer'
             onClick={() => saveTagList()}
             title='Guardar cambios'
           >

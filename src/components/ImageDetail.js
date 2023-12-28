@@ -9,25 +9,22 @@ import "animate.css"
 // Redux toolkit hooks
 import { useSelector, useDispatch } from 'react-redux'
 import ImageCarrousel from './ImageCarrousel'
-import TagList from './TagList'
 
 // Redux toolkit reducers
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { 
   editImageTitle, 
-  editImageFilters, 
+  editImageTags, 
   deleteLocalImage, 
   setChangeCarouselImage 
 } from '../features/imageSlice/imageSlice'
 
 // React hooks
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 // React icons
 import { AiFillEdit } from 'react-icons/ai'
 import { BiSolidSave } from 'react-icons/bi'
-import { HiPlus } from 'react-icons/hi'
-import { AiOutlineClose } from 'react-icons/ai'
 import { RiDeleteBinFill } from 'react-icons/ri'
 import { MdOutlineClose } from "react-icons/md"
 
@@ -46,11 +43,15 @@ const ImageDetail = (props) => {
   // Local component state
   const [selectedImage, setSelectedImage] = useState(currentImage)
 
+  const [imageTags, setImageTags] = useState({})
+
   const [closeButton, setCloseButton] = useState(false)
 
   const [disableTitle, setDisableTitle] = useState(true)
 
   const [imgTitle, setImgTitle] = useState(selectedImage.title)
+
+  const [disableTagInputs, setDisableTagInputs] = useState(true)
 
 
   // Close full image modal
@@ -73,6 +74,40 @@ const ImageDetail = (props) => {
   const titleInputRef = useRef(null)
 
 
+  // Edit image tags
+  const imageTagsInput = (event) => {
+    setImageTags({
+      ...imageTags,
+      [event.target.name]: event.target.value
+    })
+  }
+
+  const saveImageTags = async () => {
+    try {
+      await axios.patch(`${appConfig.serverUrl}/images`, {
+        id: selectedImage._id,
+        tags: {...imageTags}
+      }, {
+        headers: {
+          "Authorization": `JWT ${appConfig.token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      dispatch(editImageTags({
+        id: selectedImage._id,
+        tags: {...imageTags}
+      }))
+
+      toast.success("Las etiquetas se actualizaron correctamente")
+
+      setDisableTagInputs(true)
+    } catch (error) {
+      toast.error("Error al actualizar las etiquetas")
+    }
+  }
+
+
   const editImage = async (inputName) => {
     if (inputName === "title"){
       if (disableTitle){
@@ -81,6 +116,7 @@ const ImageDetail = (props) => {
         // Save new title
         if (imgTitle === ""){
           titleInputRef.current.focus()
+          toast.error("Ingrese un titulo para la imagen")
           return
         } else {
           // Patch request
@@ -137,6 +173,21 @@ const ImageDetail = (props) => {
       toast.error("La imagen no pudo ser eliminada")
     }
   }
+
+  
+  // Image tags constructor
+  useEffect(() => {
+    let tags = {}
+    appConfig.userInfo.tags.forEach((tagName) => {
+      if (selectedImage.tags[tagName]){
+        tags[tagName] = selectedImage.tags[tagName]
+      } else {
+        tags[tagName] = ""
+      }
+    })
+
+    setImageTags(tags)
+  }, [currentImage])
 
 
   return (
@@ -210,7 +261,8 @@ const ImageDetail = (props) => {
                     Título de imagen:
                   </label>
                 </div>
-                <input 
+                <input
+                  ref={titleInputRef}
                   className={`px-1 text-center rounded ${disableTitle ? 'text-white' : 'text-black'}`}
                   disabled={disableTitle}
                   value={imgTitle}
@@ -253,14 +305,62 @@ const ImageDetail = (props) => {
               </div>
             </div>
 
-            <div className='flex items-center justify-center mt-4'>
-              <label className='px-2 text-xl select-none'>
-                Etiquetas
-              </label>
-              
-              {
+            <div className='mt-4 flex flex-col gap-2'>
+              <div
+                className='flex items-center justify-center gap-x-2'
+              >
+                {
+                  disableTagInputs ? 
+                  <label
+                    title='Editar etiquetas' 
+                    className='cursor-pointer hover:text-yellow-300'
+                    onClick={() => setDisableTagInputs(false)}
+                  >
+                    <AiFillEdit/> 
+                  </label> : 
+                  <label
+                    title='Editar etiquetas' 
+                    className='cursor-pointer hover:text-lime-400'
+                    onClick={() => saveImageTags()}
+                  >
+                    <BiSolidSave/> 
+                  </label>
+                }
 
-              }
+                <label className='text-xl select-none'>
+                  Etiquetas:
+                </label>
+              </div>
+              
+              <div
+                className={`${appConfig.userInfo.tags.length > 9 ?
+                  "overflow-y-scroll" : ""}`}
+                style={{maxHeight: "290px"}}
+              >
+                {
+                  appConfig.userInfo.tags.map((tagName) => (
+                    <div
+                      key={tagName}
+                      className='flex justify-between items-center mb-2 px-2'
+                    >
+                      <label
+                        className='w-4/12 text-start'
+                      >
+                        {tagName}
+                      </label>
+
+                      <input
+                        value={imageTags[tagName]}
+                        name={tagName}
+                        className={`${disableTagInputs ? "text-white" : "text-black"}
+                          text-center w-8/12 rounded px-1`}
+                        onChange={(event) => imageTagsInput(event)}
+                        disabled={disableTagInputs}
+                      />
+                    </div>
+                  ))
+                }
+              </div>
 
             </div>
           </div>

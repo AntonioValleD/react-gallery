@@ -64,13 +64,25 @@ const NewImageForm = (props) => {
   const fileInputRef = useRef(null)
 
 
+  // Check image info
+  const checkImageInfo = () => {
+    if (fileInfo.file === ""){
+      toast.error("Seleccione una imagen")
+      return false
+    
+    } else if(fileInfo.title === "") {
+      titleInputRef.current.focus()
+      toast.error("Ingrese un nombre para la imagen")
+      return false
+    }
+
+    return true
+  }
+
+
   // Submit image function
   const submitImage = async () => {
-    if (fileInfo.title === ""){
-      titleInputRef.current.focus()
-      return
-    } else if (fileInfo.file === ""){
-      fileInputRef.current.focus()
+    if (!checkImageInfo()){
       return
     }
 
@@ -134,7 +146,7 @@ const NewImageForm = (props) => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 3000,
+          duration: 2000,
           style: {
             background: '#363636',
             color: '#fff',

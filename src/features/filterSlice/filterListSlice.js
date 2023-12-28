@@ -12,35 +12,39 @@ export const filterListSlice = createSlice({
   initialState: initialState,
   reducers: {
     bootstrapFilterList: (state, action) => {
-      const imageList = [...action.payload]
+      const imageList = [...action.payload.imageList]
+      const tagList = [...action.payload.tagList]
+
+      console.log(imageList, tagList);
+
       if (!imageList || imageList.length === 0){
         return
       }
 
       let allFilters = []
 
+      // Add tags to filter list
+      tagList.forEach((tag) => {
+        allFilters.push({
+          filterName: tag,
+          filterData: []
+        })
+      })
+
       imageList.forEach((image) => {
-        if (image.filters && image.filters.length !== 0){
-          image.filters.forEach((filter) => {
-            let foundFilter = allFilters.find(savedFilter => savedFilter.filterName === filter.filterName)
+        if (image.tags){
+          for (let tag in image.tags){
+            if (image.tags[tag] !== ""){
+              let foundFilter = allFilters.find(filter => filter.filterName === tag)
 
-            if (foundFilter){
-              let foundData = foundFilter.filterData.find(data => data.toLowerCase() === filter.filterData.toLowerCase())
-
-              if (!foundData){
-                allFilters.find(sfilter => sfilter.filterName === filter.filterName).filterData.push(filter.filterData.toLowerCase())
+              if (foundFilter){
+                foundFilter.filterData.push(image.tags[tag])
               }
-            } else {
-              let newFilter = {
-                filterName: filter.filterName,
-                filterData: [filter.filterData.toLowerCase()]
-              }
-
-              allFilters.push(newFilter)
             }
-          })
+          }
         }  
       })
+
       state.filterList = allFilters
     },
     setActiveFilters: (state, action) => {
