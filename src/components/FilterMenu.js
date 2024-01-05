@@ -52,7 +52,6 @@ const FilterMenu = () => {
     }
   }
 
-
   // Show filter data
   const showFilterData = (filterName) => {
     let foundFilter = fullFilterName.find(filter => filter === filterName)
@@ -80,6 +79,16 @@ const FilterMenu = () => {
   // Filtered image list constructor
   const filterImageList = () => {
     let filteredImageList = []
+
+    imageList.forEach((image) => {
+      for (let tag in image.tags){
+        if (selectedFilters.find(filter => filter === image.tags[tag])){
+          if (!filteredImageList.includes(image)){
+            filteredImageList.push(image)
+          }
+        }
+      }
+    })
 
     dispatch(setFilteredImageList({
       filteredImageList: filteredImageList
@@ -110,6 +119,17 @@ const FilterMenu = () => {
       allSelectedFilters.push(data)
       setSelectedFilters(allSelectedFilters)
     }
+  }
+
+
+  // Compare filter arrays
+  const compareArrays = (array1, array2) => {
+    for (let item of array1){
+      if (array2.includes(item)){
+        return true
+      }
+    }
+    return false
   }
 
 
@@ -152,7 +172,8 @@ const FilterMenu = () => {
             key={filter.filterName}
           >
             <h1
-              className='cursor-pointer select-none hover:text-blue-400'
+              className={`cursor-pointer select-none font-semibold hover:text-blue-300
+                ${compareArrays(filter.filterData, selectedFilters) ? 'text-lime-400' : 'text-white'}`}
               onClick={() => showFilterData(filter.filterName)}
             >
               {filter.filterName}
@@ -161,9 +182,10 @@ const FilterMenu = () => {
               fullFilterName.find(filterTag => filterTag === filter.filterName) ? 
               filter.filterData.map((data) => (
                 <div
-                  className={`ml-3 cursor-pointer hover:text-lime-400 animate__animated 
+                  className={`ml-3 cursor-pointer hover:text-blue-300 animate__animated 
                     animate__faster ${animationController.find(fName => fName === filter.filterName) ? 
-                    'animate__slideInLeft': 'animate__slideOutLeft'}`}
+                    'animate__slideInLeft': 'animate__slideOutLeft'} select-none
+                    ${selectedFilters.includes(data) ? 'text-lime-200' : 'text-white'}`}
                   key={data}
                   onClick={() => selectFilterOption(data)}
                 >

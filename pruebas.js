@@ -12,3 +12,19 @@ let exampleObject = {
 for (let item in exampleObject){
     console.log(item)
 }
+
+
+const compareArrays = (array1, array2) => {
+    for (let item of array1){
+        if (array2.includes(item)){
+            return true
+        }
+    }
+    return false
+}
+
+
+let array1 = [1, 2, 3, 4, 41]
+let array2 = [45, 10, 32, 41, 5]
+
+console.log(compareArrays(array1, array2))

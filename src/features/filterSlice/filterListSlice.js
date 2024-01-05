@@ -15,8 +15,6 @@ export const filterListSlice = createSlice({
       const imageList = [...action.payload.imageList]
       const tagList = [...action.payload.tagList]
 
-      console.log(imageList, tagList);
-
       if (!imageList || imageList.length === 0){
         return
       }
