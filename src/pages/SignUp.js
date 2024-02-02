@@ -128,7 +128,7 @@ const SignUp = () => {
 
   return (
     <div 
-      className="flex h-screen w-screen bg-gray-50 justify-center items-center"
+      className="flex h-screen w-screen bg-lime-800 justify-center items-center"
     >
       <Toaster
         toastOptions={{

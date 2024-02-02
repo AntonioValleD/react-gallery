@@ -1,6 +1,11 @@
-import React from 'react'
+// Redux hooks
 import { useSelector, useDispatch } from 'react-redux'
+
+// Redux reducer
 import { changeModalStatus } from '../features/modalSlice/modalSlice'
+
+// React icons
+import { IoIosMenu } from "react-icons/io"
 
 
 const Navigation = () => {
@@ -30,22 +35,23 @@ const Navigation = () => {
 
   return (
     <div
-      className='flex justify-between items-center px-4 py-3 text-white bg-black'
+      title='Filtrar imágenes'
+      className='flex justify-between items-center px-4 h-14 text-white bg-black'
     >
-      <div
-        className="flex flex-col justify-center items-center gap-y-1.5 cursor-pointer"
+      <button
+        className="flex flex-col justify-center items-center cursor-pointer text-5xl
+          hover:text-lime-400"
         onClick={() => openFilterMenu()}
       >
-        <span className='h-0.5 w-10 bg-white rounded-sm'></span>
-        <span className='h-0.5 w-10 bg-white rounded-sm'></span>
-        <span className='h-0.5 w-10 bg-white rounded-sm'></span>
-      </div>
+        <IoIosMenu/>
+      </button>
 
       <h1 className='text-3xl select-none'>Galería</h1>
 
       <div
         title='Usuario'
-        className='rounded-full bg-lime-600 h-10 w-10 flex justify-center items-center cursor-pointer'
+        className='rounded-full bg-lime-600 h-10 w-10 flex justify-center items-center 
+          cursor-pointer hover:bg-lime-500'
         onClick={() => openUserInfo()}
       >
         {

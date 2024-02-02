@@ -116,14 +116,15 @@ const NewImageForm = (props) => {
         modalName: "addImage",
         modalStatus: false
       }))
-    }
+    } 
   }
 
-
+ 
   // Pre-visualize selected image
   let prevImageUrl = ""
   if (fileInfo.file !== ""){
     prevImageUrl = URL.createObjectURL(fileInfo.file)
+    console.log(fileInfo.file);
   }
 
 

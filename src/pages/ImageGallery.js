@@ -120,7 +120,7 @@ const ImageGallery = () => {
 
   useEffect(() => {
     if (appConfig.token === ""){
-      navigate("/")
+      navigate("/") 
     } else if (appConfig.userInfo.tags.length === 0){
       navigate("/tags")
     }
@@ -128,7 +128,7 @@ const ImageGallery = () => {
   }, [appConfig, filteredImageList, imageList])
 
 
-  return (
+  return ( 
     <div
       className='flex flex-col'
     >
@@ -170,7 +170,7 @@ const ImageGallery = () => {
         {selectedImageList.map(image => (
           <div
             key={image._id}
-            className='pics mb-4'
+            className='pics mb-4' 
           >
             <img 
               src={image.url}
