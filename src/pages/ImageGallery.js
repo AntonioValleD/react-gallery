@@ -19,7 +19,6 @@ const ImageGallery = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-
   // State
   const appConfig = useSelector(state => state.appConfig)
   const imageList = useSelector(state => state.imageList).imageList
@@ -177,7 +176,7 @@ const ImageGallery = () => {
               alt={image._id}
               className='w-full cursor-pointer'
               onClick={() => openFullImg(image._id)}
-            />
+            /> 
           </div>
         ))}
       </div>
