@@ -1,11 +1,21 @@
-import React from 'react'
+// Libraries
 import axios from 'axios'
+
+// React hooks
 import { useState, useRef } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
-import { changeModalStatus } from '../features/modalSlice/modalSlice'
+
+// Redux hooks
 import { useDispatch, useSelector } from 'react-redux'
-import { MdOutlineClose } from "react-icons/md"
+
+//Redux reducers
+import { changeModalStatus } from '../features/modalSlice/modalSlice'
 import { setProfileImageUrl } from '../features/appConfigSlice.js/appConfigSlice'
+
+// Components
+import toast, { Toaster } from 'react-hot-toast'
+
+// React icons
+import { MdOutlineClose } from "react-icons/md"
 
 
 const UpdateProfileImage = (props) => {
@@ -54,7 +64,7 @@ const UpdateProfileImage = (props) => {
       })
 
       dispatch(setProfileImageUrl({
-        profileImageUrl: profilePicInfo.data.file.profileImageUrl
+        profileImageUrl: profilePicInfo.data.url
       }))
 
       setCloseButton(true)
@@ -90,7 +100,7 @@ const UpdateProfileImage = (props) => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 3000,
+          duration: 2000,
           style: {
             background: '#363636',
             color: '#fff',
@@ -159,7 +169,7 @@ const UpdateProfileImage = (props) => {
         />
 
         <button
-          className='absolute bottom-2 bg-green-800 hover:bg-green-600 py-1 px-2 mb-2 
+          className='absolute bottom-2 bg-lime-800 hover:bg-lime-600 py-1 px-2 mb-2 
             text-white text-base rounded'
           onClick={() => submitImage()}
         >

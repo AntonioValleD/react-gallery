@@ -24,6 +24,7 @@ import { AiFillTags } from "react-icons/ai"
 import toast, { Toaster } from 'react-hot-toast'
 import UpdateProfileImage from './UpdateProfileImage'
 import TagList from './TagList'
+import UpdatePassword from './UpdatePassword'
 
 
 const UserInfo = () => {
@@ -55,6 +56,13 @@ const UserInfo = () => {
       modalName: "tagList",
       modalStatus: true
     }))   
+  }
+
+  const changePassword = () => {
+    dispatch(changeModalStatus({
+      modalName: "updatePassword",
+      modalStatus: true
+    }))
   }
 
 
@@ -104,6 +112,8 @@ const UserInfo = () => {
     modalWindow = <TagList
       update={true}
     />
+  } else if (modalStatus.updatePassword){
+    modalWindow = <UpdatePassword/>
   }
 
 
@@ -121,7 +131,7 @@ const UserInfo = () => {
       <Toaster
         toastOptions={{
           position: "top-center",
-          duration: 1200,
+          duration: 2000,
           style: {
             background: '#363636',
             color: '#fff',
@@ -192,6 +202,7 @@ const UserInfo = () => {
           <label
             className='rounded-full border p-1 cursor-pointer text-lg hover:text-yellow-300 hover:border-yellow-300'
             title='Cambiar contraseña'
+            onClick={() => changePassword()}
           >
             <BsFillKeyFill/>
           </label>
