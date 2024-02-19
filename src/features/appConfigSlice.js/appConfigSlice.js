@@ -7,7 +7,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     token: "",
-    serverUrl: "http://localhost:4000",
+    serverUrl: "https://image-gallery-server.fly.dev",
     userInfo: {
         id: "",
         name: "",
